@@ -20,4 +20,12 @@ void  scheduler_clean_up               ();
 
 void  scheduler_show_queue             ();
 
+//Compare functions
+int comparerFCFS(const void *a, const void *b);
+int comparerSJF(const void *a, const void *b);
+int comparerPSJF(const void *a, const void *b);
+int comparerPRI(const void *a, const void *b);
+int comparerPPRI(const void *a, const void *b);
+int comparerRR(const void *a, const void *b);
+
 #endif /* LIBSCHEDULER_H_ */
