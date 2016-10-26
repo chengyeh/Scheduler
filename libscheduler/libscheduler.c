@@ -16,13 +16,7 @@
 typedef struct _job_t {
 	int job_number;
 	int priority;
-
 	int arrival_time;
-	int turnaround_time;
-	int waiting_time;
-	int reponse_time;
-
-	int running_time;
 	int time_remaining;
 } job_t;
 
@@ -164,7 +158,7 @@ void scheduler_show_queue() {
  @param const void pointer.
  @param const void pointer.
  */
-int comparerFCFS(const void *a, const void *b){
+int comparerFCFS(const void *a, const void *b) {
 	return (((job_t *) a)->arrival_time - ((job_t *) b)->arrival_time);
 }
 
@@ -173,32 +167,53 @@ int comparerFCFS(const void *a, const void *b){
  @param const void pointer.
  @param const void pointer.
  */
-int comparerSJF(const void *a, const void *b);
+int comparerSJF(const void *a, const void *b) {
+	return (((job_t*) a)->time_remaining - ((job_t*) b)->time_remaining);
+}
 
 /**
  Compares two process by PSJF Scheduling Policy.
  @param const void pointer.
  @param const void pointer.
  */
-int comparerPSJF(const void *a, const void *b);
+int comparerPSJF(const void *a, const void *b) {
+
+	int compare = ((job_t *) a)->time_remaining - ((job_t *) b)->time_remaining;
+	if (compare == 0) {
+		compare = temp = ((job_t*) x)->arrival_time
+				- ((job_t*) y)->arrival_time;
+	}
+	return (compare);
+}
 
 /**
- Compares two process by FCFS Scheduling Policy.
+ Compares two process by PRI Scheduling Policy.
  @param const void pointer.
  @param const void pointer.
  */
-int comparerPRI(const void *a, const void *b);
+int comparerPRI(const void *a, const void *b) {
+	return (((job_t*) a)->priority - ((job_t*) b)->priority);
+}
 
 /**
  Compares two process by PPRI Scheduling Policy.
  @param const void pointer.
  @param const void pointer.
  */
-int comparerPPRI(const void *a, const void *b);
+int comparerPPRI(const void *a, const void *b) {
+
+	int compare = ((job_t*) a)->priority - ((job_t*) b)->priority;
+	if (compare == 0) {
+		int compare = ((job_t*) a)->arrival_time - ((job_t*) b)->arrival_time;
+	}
+	return (compare);
+}
 
 /**
  Compares two process by RR Scheduling Policy.
  @param const void pointer.
  @param const void pointer.
  */
-int comparerRR(const void *a, const void *b);
+int comparerRR(const void *a, const void *b) {
+	return 1;
+}
