@@ -20,6 +20,9 @@ typedef struct _job_t {
 	int time_remaining;
 } job_t;
 
+//Global variables
+priqueue_t *job_queue;
+
 /**
  Initalizes the scheduler.
  
@@ -34,11 +37,31 @@ typedef struct _job_t {
  */
 void scheduler_start_up(int cores, scheme_t scheme) {
 
+	switch (scheme) {
+	case FCFS:
+		priqueue_init(job_queue, compare_FCFS);
+		break;
+	case SJF:
+		priqueue_init(job_queue, compare_SJF);
+		break;
+	case PSJF:
+		priqueue_init(job_queue, compare_PSJF);
+		break;
+	case PRI:
+		priqueue_init(job_queue, compare_PRI);
+		break;
+	case PPRI:
+		priqueue_init(job_queue, compare_PPRI);
+		break;
+	case RR:
+		priqueue_init(job_queue, compare_RR);
+		break;
+	}
 }
 
 /**
  Called when a new job arrives.
- 
+
  If multiple cores are idle, the job should be assigned to the core with the
  lowest id.
  If the job arriving should be scheduled to run during the next
@@ -54,7 +77,7 @@ void scheduler_start_up(int cores, scheme_t scheme) {
  @param priority the priority of the job. (The lower the value, the higher the priority.)
  @return index of core job should be scheduled on
  @return -1 if no scheduling changes should be made.
- 
+
  */
 int scheduler_new_job(int job_number, int time, int running_time, int priority) {
 	return -1;
@@ -62,12 +85,12 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 
 /**
  Called when a job has completed execution.
- 
+
  The core_id, job_number and time parameters are provided for convenience. You may be able to calculate the values with your own data structure.
  If any job should be scheduled to run on the core free'd up by the
  finished job, return the job_number of the job that should be scheduled to
  run on core core_id.
- 
+
  @param core_id the zero-based index of the core where the job was located.
  @param job_number a globally unique identification number of the job.
  @param time the current time of the simulator.
@@ -81,7 +104,7 @@ int scheduler_job_finished(int core_id, int job_number, int time) {
 /**
  When the scheme is set to RR, called when the quantum timer has expired
  on a core.
- 
+
  If any job should be scheduled to run on the core free'd up by
  the quantum expiration, return the job_number of the job that should be
  scheduled to run on core core_id.
@@ -130,7 +153,7 @@ float scheduler_average_response_time() {
 
 /**
  Free any memory associated with your scheduler.
- 
+
  Assumptions:
  - This function will be the last function called in your library.
  */
@@ -158,7 +181,7 @@ void scheduler_show_queue() {
  @param const void pointer.
  @param const void pointer.
  */
-int comparerFCFS(const void *a, const void *b) {
+int compare_FCFS(const void* a, const void* b) {
 	return (((job_t *) a)->arrival_time - ((job_t *) b)->arrival_time);
 }
 
@@ -167,7 +190,7 @@ int comparerFCFS(const void *a, const void *b) {
  @param const void pointer.
  @param const void pointer.
  */
-int comparerSJF(const void *a, const void *b) {
+int compare_SJF(const void* a, const void* b) {
 	return (((job_t*) a)->time_remaining - ((job_t*) b)->time_remaining);
 }
 
@@ -176,12 +199,11 @@ int comparerSJF(const void *a, const void *b) {
  @param const void pointer.
  @param const void pointer.
  */
-int comparerPSJF(const void *a, const void *b) {
+int compare_PSJF(const void* a, const void* b) {
 
 	int compare = ((job_t *) a)->time_remaining - ((job_t *) b)->time_remaining;
 	if (compare == 0) {
-		compare = temp = ((job_t*) x)->arrival_time
-				- ((job_t*) y)->arrival_time;
+		compare = ((job_t*) a)->arrival_time - ((job_t*) b)->arrival_time;
 	}
 	return (compare);
 }
@@ -191,7 +213,7 @@ int comparerPSJF(const void *a, const void *b) {
  @param const void pointer.
  @param const void pointer.
  */
-int comparerPRI(const void *a, const void *b) {
+int compare_PRI(const void* a, const void* b) {
 	return (((job_t*) a)->priority - ((job_t*) b)->priority);
 }
 
@@ -200,7 +222,7 @@ int comparerPRI(const void *a, const void *b) {
  @param const void pointer.
  @param const void pointer.
  */
-int comparerPPRI(const void *a, const void *b) {
+int compare_PPRI(const void* a, const void* b) {
 
 	int compare = ((job_t*) a)->priority - ((job_t*) b)->priority;
 	if (compare == 0) {
@@ -214,6 +236,6 @@ int comparerPPRI(const void *a, const void *b) {
  @param const void pointer.
  @param const void pointer.
  */
-int comparerRR(const void *a, const void *b) {
+int compare_RR(const void* a, const void* b) {
 	return 1;
 }

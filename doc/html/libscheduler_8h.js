@@ -8,6 +8,12 @@ var libscheduler_8h =
       [ "PPRI", "libscheduler_8h.html#a4a9a6481e652361e21cee179b9a5412dacd6ac2b38866367e49976a33de2b1542", null ],
       [ "RR", "libscheduler_8h.html#a4a9a6481e652361e21cee179b9a5412daea4586c054afe1678864fa75dfb1787d", null ]
     ] ],
+    [ "compare_FCFS", "libscheduler_8h.html#aed339ceaa71cb90e3f508db0524c5eaa", null ],
+    [ "compare_PPRI", "libscheduler_8h.html#a28f43f77ba1db50c00d28990fa23d4fa", null ],
+    [ "compare_PRI", "libscheduler_8h.html#a59f087a1ba8039e221876eaadd2bab6a", null ],
+    [ "compare_PSJF", "libscheduler_8h.html#a018f953922fb22312c4710027e0541b4", null ],
+    [ "compare_RR", "libscheduler_8h.html#a1d56e38a77b96417b6d4e89a7a993255", null ],
+    [ "compare_SJF", "libscheduler_8h.html#abcef241725c85bfd6696c5fba6038dc3", null ],
     [ "scheduler_average_response_time", "libscheduler_8h.html#a005484fb08747739cd1a5fc4fab74bea", null ],
     [ "scheduler_average_turnaround_time", "libscheduler_8h.html#a1048ae9f687974cae1dd9bc5cf0e1752", null ],
     [ "scheduler_average_waiting_time", "libscheduler_8h.html#ad0e6ae66206f1643048da694be43e191", null ],

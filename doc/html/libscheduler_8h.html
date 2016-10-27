@@ -157,8 +157,236 @@ Functions</h2></td></tr>
 <tr class="memitem:a21c8603e838d15e7967ae0c637a66650"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libscheduler_8h.html#a21c8603e838d15e7967ae0c637a66650">scheduler_show_queue</a> ()</td></tr>
 <tr class="memdesc:a21c8603e838d15e7967ae0c637a66650"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function may print out any debugging information you choose.  <a href="#a21c8603e838d15e7967ae0c637a66650">More...</a><br /></td></tr>
 <tr class="separator:a21c8603e838d15e7967ae0c637a66650"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed339ceaa71cb90e3f508db0524c5eaa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libscheduler_8h.html#aed339ceaa71cb90e3f508db0524c5eaa">compare_FCFS</a> (const void *a, const void *b)</td></tr>
+<tr class="memdesc:aed339ceaa71cb90e3f508db0524c5eaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two process by FCFS Scheduling Policy.  <a href="#aed339ceaa71cb90e3f508db0524c5eaa">More...</a><br /></td></tr>
+<tr class="separator:aed339ceaa71cb90e3f508db0524c5eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcef241725c85bfd6696c5fba6038dc3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libscheduler_8h.html#abcef241725c85bfd6696c5fba6038dc3">compare_SJF</a> (const void *a, const void *b)</td></tr>
+<tr class="memdesc:abcef241725c85bfd6696c5fba6038dc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two process by SFJ Scheduling Policy.  <a href="#abcef241725c85bfd6696c5fba6038dc3">More...</a><br /></td></tr>
+<tr class="separator:abcef241725c85bfd6696c5fba6038dc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a018f953922fb22312c4710027e0541b4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libscheduler_8h.html#a018f953922fb22312c4710027e0541b4">compare_PSJF</a> (const void *a, const void *b)</td></tr>
+<tr class="memdesc:a018f953922fb22312c4710027e0541b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two process by PSJF Scheduling Policy.  <a href="#a018f953922fb22312c4710027e0541b4">More...</a><br /></td></tr>
+<tr class="separator:a018f953922fb22312c4710027e0541b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59f087a1ba8039e221876eaadd2bab6a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libscheduler_8h.html#a59f087a1ba8039e221876eaadd2bab6a">compare_PRI</a> (const void *a, const void *b)</td></tr>
+<tr class="memdesc:a59f087a1ba8039e221876eaadd2bab6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two process by PRI Scheduling Policy.  <a href="#a59f087a1ba8039e221876eaadd2bab6a">More...</a><br /></td></tr>
+<tr class="separator:a59f087a1ba8039e221876eaadd2bab6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28f43f77ba1db50c00d28990fa23d4fa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libscheduler_8h.html#a28f43f77ba1db50c00d28990fa23d4fa">compare_PPRI</a> (const void *a, const void *b)</td></tr>
+<tr class="memdesc:a28f43f77ba1db50c00d28990fa23d4fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two process by PPRI Scheduling Policy.  <a href="#a28f43f77ba1db50c00d28990fa23d4fa">More...</a><br /></td></tr>
+<tr class="separator:a28f43f77ba1db50c00d28990fa23d4fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d56e38a77b96417b6d4e89a7a993255"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libscheduler_8h.html#a1d56e38a77b96417b6d4e89a7a993255">compare_RR</a> (const void *a, const void *b)</td></tr>
+<tr class="memdesc:a1d56e38a77b96417b6d4e89a7a993255"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two process by RR Scheduling Policy.  <a href="#a1d56e38a77b96417b6d4e89a7a993255">More...</a><br /></td></tr>
+<tr class="separator:a1d56e38a77b96417b6d4e89a7a993255"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="aed339ceaa71cb90e3f508db0524c5eaa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int compare_FCFS </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares two process by FCFS Scheduling Policy. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a28f43f77ba1db50c00d28990fa23d4fa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int compare_PPRI </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares two process by PPRI Scheduling Policy. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a59f087a1ba8039e221876eaadd2bab6a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int compare_PRI </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares two process by PRI Scheduling Policy. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a018f953922fb22312c4710027e0541b4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int compare_PSJF </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares two process by PSJF Scheduling Policy. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a1d56e38a77b96417b6d4e89a7a993255"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int compare_RR </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares two process by RR Scheduling Policy. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="abcef241725c85bfd6696c5fba6038dc3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int compare_SJF </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares two process by SFJ Scheduling Policy. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+    <tr><td class="paramname">const</td><td>void pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a005484fb08747739cd1a5fc4fab74bea"></a>
 <div class="memitem">
 <div class="memproto">
