@@ -123,7 +123,7 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 	//^^^^^^delete^^^^^^^^
 
 	//Main decision to schedule
-	if (current_scheduling_scheme == FCFS) {
+	if (current_scheduling_scheme == FCFS || current_scheduling_scheme == SJF) {
 		priqueue_offer(job_queue, new_job);
 		if (peek_job == NULL) {
 			new_job->start_time = time;
@@ -163,21 +163,59 @@ int scheduler_job_finished(int core_id, int job_number, int time) {
 	printf("*********"ANSI_COLOR_RESET"\n");
 	//^^^^^^delete^^^^^^^^
 
-	//Get info about the job finished
-	job_t* finished_job = priqueue_poll(job_queue);
+	if (current_scheduling_scheme == FCFS) {
+		//Get info about the job finished
+		job_t* finished_job = priqueue_poll(job_queue);
 
-	//Calculate metrics
-	total_turnaround_time += time - finished_job->arrival_time;
-	total_response_time += finished_job->start_time - finished_job->arrival_time;
-	total_waiting_time += finished_job->start_time - finished_job->arrival_time;
-	free(finished_job);
+		//Calculate metrics
+		total_turnaround_time += time - finished_job->arrival_time;
+		total_response_time += finished_job->start_time
+				- finished_job->arrival_time;
+		total_waiting_time += finished_job->start_time
+				- finished_job->arrival_time;
+		free(finished_job);
 
-	job_t* peek_job = priqueue_at(job_queue, 0);
-	if (peek_job == NULL) {
-		return -1;
+		job_t* peek_job = priqueue_at(job_queue, 0);
+		if (peek_job == NULL) {
+			return -1;
+		} else {
+			peek_job->start_time = time;
+			return peek_job->job_number;
+		}
+	} else if (current_scheduling_scheme == SJF) {
+		//find the finished job on the queue
+		int index_of_job;
+
+		for (int i = 0; i < priqueue_size(job_queue); i++) {
+			job_t* temp_job = priqueue_at(job_queue, i);
+			if (temp_job->job_number == job_number) {
+				index_of_job = i;
+			}
+		}
+
+		//Get info about the job finished
+		job_t* finished_job = priqueue_at(job_queue,index_of_job);
+
+		//Calculate metrics
+		total_turnaround_time += time - finished_job->arrival_time;
+		total_response_time += finished_job->start_time
+				- finished_job->arrival_time;
+		total_waiting_time += finished_job->start_time
+				- finished_job->arrival_time;
+
+		//remove finished job
+		priqueue_remove_at(job_queue, index_of_job);
+		free(finished_job);
+
+		job_t* peek_job = priqueue_at(job_queue, 0);
+		if (peek_job == NULL) {
+			return -1;
+		} else {
+			peek_job->start_time = time;
+			return peek_job->job_number;
+		}
 	} else {
-		peek_job->start_time = time;
-		return peek_job->job_number;
+		return -1;
 	}
 }
 
