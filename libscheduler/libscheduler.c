@@ -139,10 +139,8 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 			priqueue_offer(job_queue, new_job);
 			new_job->start_time = time;
 			return 0;
-		} else if () {
-
-		} else {
-			return -1;
+		} else  {
+			peek_job->remaining_time
 		}
 	} else {
 		return -1;
