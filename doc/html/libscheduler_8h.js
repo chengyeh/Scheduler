@@ -1,5 +1,12 @@
 var libscheduler_8h =
 [
+    [ "ANSI_COLOR_BLUE", "libscheduler_8h.html#aca16e6a49eb51333c5fd3eee19487315", null ],
+    [ "ANSI_COLOR_CYAN", "libscheduler_8h.html#a8d0b0043e152438bb39b918a1f98c65f", null ],
+    [ "ANSI_COLOR_GREEN", "libscheduler_8h.html#a966c72d8d733c7734c6c784753d894c7", null ],
+    [ "ANSI_COLOR_MAGENTA", "libscheduler_8h.html#acb30614ba1535da5b9d0c490b3c10515", null ],
+    [ "ANSI_COLOR_RED", "libscheduler_8h.html#a34995b955465f6bbb37c359173d50477", null ],
+    [ "ANSI_COLOR_RESET", "libscheduler_8h.html#a92a364c2b863dde1a024a77eac2a5b3b", null ],
+    [ "ANSI_COLOR_YELLOW", "libscheduler_8h.html#a5a123b382640b3aa65dd5db386002fbc", null ],
     [ "scheme_t", "libscheduler_8h.html#a4a9a6481e652361e21cee179b9a5412d", [
       [ "FCFS", "libscheduler_8h.html#a4a9a6481e652361e21cee179b9a5412da423cd86c32d4009579e138b098f06ba8", null ],
       [ "SJF", "libscheduler_8h.html#a4a9a6481e652361e21cee179b9a5412da8ade209ddd4ef30da88ba1c9780b5e33", null ],

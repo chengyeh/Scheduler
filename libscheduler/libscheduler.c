@@ -16,13 +16,20 @@
 typedef struct _job_t {
 	int job_number;
 	int priority;
-	int arrival_time;
 	int running_time;
+
+	int arrival_time;
+	int start_time;
 	int remaining_time;
 } job_t;
 
 //Global variables
 priqueue_t *job_queue;
+scheme_t current_scheduling_scheme;
+int total_waiting_time;
+int total_turnaround_time;
+int total_response_time;
+int total_number_of_jobs;
 
 /**
  Initalizes the scheduler.
@@ -37,6 +44,13 @@ priqueue_t *job_queue;
  @param scheme  the scheduling scheme that should be used. This value will be one of the six enum values of scheme_t
  */
 void scheduler_start_up(int cores, scheme_t scheme) {
+
+	//Set global variables
+	current_scheduling_scheme = scheme;
+	total_waiting_time = 0;
+	total_turnaround_time = 0;
+	total_response_time = 0;
+	total_number_of_jobs = 0;
 
 	job_queue = malloc(sizeof(priqueue_t));
 
@@ -83,20 +97,43 @@ void scheduler_start_up(int cores, scheme_t scheme) {
 
  */
 int scheduler_new_job(int job_number, int time, int running_time, int priority) {
-
+	//Create struct object and populate the members
 	job_t *new_job;
 	new_job = malloc(sizeof(job_t));
 
 	new_job->job_number = job_number;
-	new_job->arrival_time = time;
 	new_job->running_time = running_time;
 	new_job->priority = priority;
+
+	new_job->arrival_time = time;
 	new_job->remaining_time = running_time;
 
-	priqueue_offer(job_queue, new_job);
+	//Set global variables
+	total_number_of_jobs++;
 
-	return 0;
-//	return -1;
+	//Gather info job queue info
+	job_t* peek_job = priqueue_at(job_queue, 0);
+
+	//******delete********
+	printf(
+	ANSI_COLOR_YELLOW"******** scheduler_new_job: Elements in jobs queue : ");
+	for (int i = 0; i < priqueue_size(job_queue); i++)
+		printf("%d ", *((int *) priqueue_at(job_queue, i)));
+	printf("*********"ANSI_COLOR_RESET"\n");
+	//^^^^^^delete^^^^^^^^
+
+	//Main decision to schedule
+	if (current_scheduling_scheme == FCFS) {
+		priqueue_offer(job_queue, new_job);
+		if (peek_job == NULL) {
+			new_job->start_time = time;
+			return 0;
+		} else {
+			return -1;
+		}
+	} else {
+		return -1;
+	}
 }
 
 /**
@@ -114,12 +151,32 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
  @return -1 if core should remain idle.
  */
 int scheduler_job_finished(int core_id, int job_number, int time) {
-	job_t* next_job = priqueue_poll(job_queue);
-	free(next_job);
+
+	//******delete********
+	printf(
+			ANSI_COLOR_MAGENTA"******** core_id: %d, job_number: %d, time: %d *********\n",
+			core_id, job_number, time);
+	printf(
+			ANSI_COLOR_MAGENTA"******** scheduler_job_finished: Elements in jobs queue : ");
+	for (int i = 0; i < priqueue_size(job_queue); i++)
+		printf("%d ", *((int *) priqueue_at(job_queue, i)));
+	printf("*********"ANSI_COLOR_RESET"\n");
+	//^^^^^^delete^^^^^^^^
+
+	//Get info about the job finished
+	job_t* finished_job = priqueue_poll(job_queue);
+
+	//Calculate metrics
+	total_turnaround_time += time - finished_job->arrival_time;
+	total_response_time += finished_job->start_time - finished_job->arrival_time;
+	total_waiting_time += finished_job->start_time - finished_job->arrival_time;
+	free(finished_job);
 
 	job_t* peek_job = priqueue_at(job_queue, 0);
-	if(peek_job == NULL){
-	return -1;}else{
+	if (peek_job == NULL) {
+		return -1;
+	} else {
+		peek_job->start_time = time;
 		return peek_job->job_number;
 	}
 }
@@ -149,7 +206,7 @@ int scheduler_quantum_expired(int core_id, int time) {
  @return the average waiting time of all jobs scheduled.
  */
 float scheduler_average_waiting_time() {
-	return 0.0;
+	return ((float) (total_waiting_time) / total_number_of_jobs);
 }
 
 /**
@@ -160,7 +217,7 @@ float scheduler_average_waiting_time() {
  @return the average turnaround time of all jobs scheduled.
  */
 float scheduler_average_turnaround_time() {
-	return 0.0;
+	return ((float) (total_turnaround_time) / total_number_of_jobs);
 }
 
 /**
@@ -171,7 +228,7 @@ float scheduler_average_turnaround_time() {
  @return the average response time of all jobs scheduled.
  */
 float scheduler_average_response_time() {
-	return 0.0;
+	return ((float) (total_response_time) / total_number_of_jobs);
 }
 
 /**
@@ -181,7 +238,7 @@ float scheduler_average_response_time() {
  - This function will be the last function called in your library.
  */
 void scheduler_clean_up() {
-	priqueue_destroy(job_queue);
+	//priqueue_destroy(job_queue);
 }
 
 /**
@@ -199,29 +256,14 @@ void scheduler_show_queue() {
 
 }
 
-/**
- Compares two process by FCFS Scheduling Policy.
- @param const void pointer.
- @param const void pointer.
- */
 int compare_FCFS(const void* a, const void* b) {
 	return (((job_t*) a)->arrival_time - ((job_t*) b)->arrival_time);
 }
 
-/**
- Compares two process by SFJ Scheduling Policy.
- @param const void pointer.
- @param const void pointer.
- */
 int compare_SJF(const void* a, const void* b) {
 	return (((job_t*) a)->running_time - ((job_t*) b)->running_time);
 }
 
-/**
- Compares two process by PSJF Scheduling Policy.
- @param const void pointer.
- @param const void pointer.
- */
 int compare_PSJF(const void* a, const void* b) {
 
 	int compare = ((job_t*) a)->running_time - ((job_t*) b)->running_time;
@@ -231,20 +273,10 @@ int compare_PSJF(const void* a, const void* b) {
 	return (compare);
 }
 
-/**
- Compares two process by PRI Scheduling Policy.
- @param const void pointer.
- @param const void pointer.
- */
 int compare_PRI(const void* a, const void* b) {
 	return (((job_t*) a)->priority - ((job_t*) b)->priority);
 }
 
-/**
- Compares two process by PPRI Scheduling Policy.
- @param const void pointer.
- @param const void pointer.
- */
 int compare_PPRI(const void* a, const void* b) {
 
 	int compare = ((job_t*) a)->priority - ((job_t*) b)->priority;
@@ -254,11 +286,6 @@ int compare_PPRI(const void* a, const void* b) {
 	return (compare);
 }
 
-/**
- Compares two process by RR Scheduling Policy.
- @param const void pointer.
- @param const void pointer.
- */
 int compare_RR(const void* a, const void* b) {
 	return 1;
 }

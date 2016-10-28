@@ -16,5 +16,10 @@ var libscheduler_8c =
     [ "scheduler_quantum_expired", "libscheduler_8c.html#a3bc78e1ddd7eb1ba2285fa60599d38c1", null ],
     [ "scheduler_show_queue", "libscheduler_8c.html#a21c8603e838d15e7967ae0c637a66650", null ],
     [ "scheduler_start_up", "libscheduler_8c.html#a5dad2df1b25832a1438546974e337cbc", null ],
-    [ "job_queue", "libscheduler_8c.html#ab79b60f6f103277f8bb038a539915eab", null ]
+    [ "current_scheduling_scheme", "libscheduler_8c.html#a4a3aa71be3f72c80d68ac56e6169d051", null ],
+    [ "job_queue", "libscheduler_8c.html#ab79b60f6f103277f8bb038a539915eab", null ],
+    [ "total_number_of_jobs", "libscheduler_8c.html#af0558b6ce534cd0346564fc9c3ca484d", null ],
+    [ "total_response_time", "libscheduler_8c.html#afa11ed57d8782d835c04d3577637141f", null ],
+    [ "total_turnaround_time", "libscheduler_8c.html#aaa1565202581ba7eef2b6e8a1adca64b", null ],
+    [ "total_waiting_time", "libscheduler_8c.html#a4314f4869f2424c25df8292b34325453", null ]
 ];
