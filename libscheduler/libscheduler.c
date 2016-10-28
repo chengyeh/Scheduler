@@ -113,6 +113,9 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 
 	//Gather info job queue info
 	job_t* peek_job = priqueue_at(job_queue, 0);
+	if(peek_job != NULL) {
+		peek_job->remaining_time -= time;
+	}
 
 	//******delete********
 	printf(
@@ -133,7 +136,16 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 			return -1;
 		}
 	} else if (current_scheduling_scheme == PSJF) {
-
+		priqueue_offer(job_queue, new_job);
+		if (peek_job == NULL) {
+			new_job->start_time = time;
+			return 0;
+		} else if ((peek_job->remaining_time) > (new_job->remaining_time)) {
+			new_job->start_time = time;
+			return 0;
+		} else {
+			return -1;
+		}
 	} else if (current_scheduling_scheme == PPRI) {
 		if (peek_job == NULL) {
 			priqueue_offer(job_queue, new_job);
