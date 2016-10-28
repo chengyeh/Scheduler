@@ -132,6 +132,8 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 		} else {
 			return -1;
 		}
+	} else if (current_scheduling_scheme == PSJF){
+
 	} else {
 		return -1;
 	}
@@ -248,6 +250,7 @@ int scheduler_job_finished(int core_id, int job_number, int time) {
 			return peek_job->job_number;
 		}
 	} else if (current_scheduling_scheme == PSJF) {
+
 
 	} else if (current_scheduling_scheme == PPRI) {
 
