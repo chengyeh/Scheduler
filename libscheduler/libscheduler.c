@@ -17,7 +17,8 @@ typedef struct _job_t {
 	int job_number;
 	int priority;
 	int arrival_time;
-	int time_remaining;
+	int running_time;
+	int remaining_time;
 } job_t;
 
 //Global variables
@@ -36,6 +37,8 @@ priqueue_t *job_queue;
  @param scheme  the scheduling scheme that should be used. This value will be one of the six enum values of scheme_t
  */
 void scheduler_start_up(int cores, scheme_t scheme) {
+
+	job_queue = malloc(sizeof(priqueue_t));
 
 	switch (scheme) {
 	case FCFS:
@@ -80,7 +83,20 @@ void scheduler_start_up(int cores, scheme_t scheme) {
 
  */
 int scheduler_new_job(int job_number, int time, int running_time, int priority) {
-	return -1;
+
+	job_t *new_job;
+	new_job = malloc(sizeof(job_t));
+
+	new_job->job_number = job_number;
+	new_job->arrival_time = time;
+	new_job->running_time = running_time;
+	new_job->priority = priority;
+	new_job->remaining_time = running_time;
+
+	priqueue_offer(job_queue, new_job);
+
+	return 0;
+//	return -1;
 }
 
 /**
@@ -98,7 +114,14 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
  @return -1 if core should remain idle.
  */
 int scheduler_job_finished(int core_id, int job_number, int time) {
-	return -1;
+	job_t* next_job = priqueue_poll(job_queue);
+	free(next_job);
+
+	job_t* peek_job = priqueue_at(job_queue, 0);
+	if(peek_job == NULL){
+	return -1;}else{
+		return peek_job->job_number;
+	}
 }
 
 /**
@@ -158,7 +181,7 @@ float scheduler_average_response_time() {
  - This function will be the last function called in your library.
  */
 void scheduler_clean_up() {
-
+	priqueue_destroy(job_queue);
 }
 
 /**
@@ -182,7 +205,7 @@ void scheduler_show_queue() {
  @param const void pointer.
  */
 int compare_FCFS(const void* a, const void* b) {
-	return (((job_t *) a)->arrival_time - ((job_t *) b)->arrival_time);
+	return (((job_t*) a)->arrival_time - ((job_t*) b)->arrival_time);
 }
 
 /**
@@ -191,7 +214,7 @@ int compare_FCFS(const void* a, const void* b) {
  @param const void pointer.
  */
 int compare_SJF(const void* a, const void* b) {
-	return (((job_t*) a)->time_remaining - ((job_t*) b)->time_remaining);
+	return (((job_t*) a)->running_time - ((job_t*) b)->running_time);
 }
 
 /**
@@ -201,7 +224,7 @@ int compare_SJF(const void* a, const void* b) {
  */
 int compare_PSJF(const void* a, const void* b) {
 
-	int compare = ((job_t *) a)->time_remaining - ((job_t *) b)->time_remaining;
+	int compare = ((job_t*) a)->running_time - ((job_t*) b)->running_time;
 	if (compare == 0) {
 		compare = ((job_t*) a)->arrival_time - ((job_t*) b)->arrival_time;
 	}
