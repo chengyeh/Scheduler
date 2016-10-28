@@ -114,7 +114,7 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 	//Gather info job queue info
 	job_t* peek_job = priqueue_at(job_queue, 0);
 	if(peek_job != NULL) {
-		peek_job->remaining_time -= peek_job->start_time;
+		peek_job->remaining_time -= time;
 	}
 
 	//******delete********
@@ -135,8 +135,7 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 		} else {
 			return -1;
 		}
-<<<<<<< HEAD
-	} else if (current_scheduling_scheme == PSJF){
+	} else if (current_scheduling_scheme == PSJF) {
 		priqueue_offer(job_queue, new_job);
 		if (peek_job == NULL) {
 			new_job->start_time = time;
@@ -144,18 +143,18 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 		} else if ((peek_job->remaining_time) > (new_job->remaining_time)) {
 			new_job->start_time = time;
 			return 0;
-=======
-	} else if (current_scheduling_scheme == PSJF) {
-
+		} else {
+			return -1;
+		}
 	} else if (current_scheduling_scheme == PPRI) {
 		if (peek_job == NULL) {
 			priqueue_offer(job_queue, new_job);
 			new_job->start_time = time;
 			return 0;
-		} else if () {
-
->>>>>>> ebc5252caaf22ae64d1c53288c2bdcf25f17427f
-		} else {
+		} //else if () {
+//			return -1;
+//		}
+		else {
 			return -1;
 		}
 	} else {
