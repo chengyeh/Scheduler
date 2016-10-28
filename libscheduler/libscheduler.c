@@ -135,6 +135,7 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 		} else {
 			return -1;
 		}
+<<<<<<< HEAD
 	} else if (current_scheduling_scheme == PSJF){
 		priqueue_offer(job_queue, new_job);
 		if (peek_job == NULL) {
@@ -143,6 +144,17 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 		} else if ((peek_job->remaining_time) > (new_job->remaining_time)) {
 			new_job->start_time = time;
 			return 0;
+=======
+	} else if (current_scheduling_scheme == PSJF) {
+
+	} else if (current_scheduling_scheme == PPRI) {
+		if (peek_job == NULL) {
+			priqueue_offer(job_queue, new_job);
+			new_job->start_time = time;
+			return 0;
+		} else if () {
+
+>>>>>>> ebc5252caaf22ae64d1c53288c2bdcf25f17427f
 		} else {
 			return -1;
 		}
@@ -357,7 +369,7 @@ int compare_SJF(const void* a, const void* b) {
 
 int compare_PSJF(const void* a, const void* b) {
 
-	int compare = ((job_t*) a)->running_time - ((job_t*) b)->running_time;
+	int compare = ((job_t*) a)->remaining_time - ((job_t*) b)->remaining_time;
 	if (compare == 0) {
 		compare = ((job_t*) a)->arrival_time - ((job_t*) b)->arrival_time;
 	}
