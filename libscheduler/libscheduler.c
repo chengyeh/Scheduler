@@ -155,14 +155,18 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 			return -1;
 		}
 	} else if (current_scheduling_scheme == PPRI) {
+		priqueue_offer(job_queue, new_job);
 		if (peek_job == NULL) {
-			priqueue_offer(job_queue, new_job);
+			new_job->init_start_time = time;
 			new_job->start_time = time;
 			return 0;
-		} //else if () {
-//			return -1;
-//		}
-		else {
+		} else if (peek_job->priority > new_job->priority) {
+			new_job->init_start_time = time;
+			new_job->start_time = time;
+			return 0;
+		} else {
+			new_job->init_start_time = -1;
+			new_job->pause_time = time;
 			return -1;
 		}
 	} else {
@@ -289,6 +293,7 @@ int scheduler_job_finished(int core_id, int job_number, int time) {
 		total_response_time += finished_job->init_start_time
 				- finished_job->arrival_time;
 		total_waiting_time += finished_job->idle_time;
+		//free(finished_job);
 
 		job_t* peek_job = priqueue_at(job_queue, 0);
 		if (peek_job == NULL) {
@@ -301,10 +306,28 @@ int scheduler_job_finished(int core_id, int job_number, int time) {
 			peek_job->idle_time += (peek_job->start_time) - (peek_job->pause_time);
 			return peek_job->job_number;
 		}
-
-		return -1;
 	} else if (current_scheduling_scheme == PPRI) {
-		return -1;
+		//Get info about the job finished
+		job_t* finished_job = priqueue_poll(job_queue);
+
+		//Calculate metrics
+		total_turnaround_time += time - finished_job->arrival_time;
+		total_response_time += finished_job->init_start_time
+				- finished_job->arrival_time;
+		total_waiting_time += finished_job->idle_time;
+		//free(finished_job);
+
+		job_t* peek_job = priqueue_at(job_queue, 0);
+		if (peek_job == NULL) {
+			return -1;
+		} else {
+			if(peek_job->init_start_time == -1) {
+				peek_job->init_start_time = time;
+			}
+			peek_job->start_time = time;
+			peek_job->idle_time += (peek_job->start_time) - (peek_job->pause_time);
+			return peek_job->job_number;
+		}
 	} else if (current_scheduling_scheme == RR) {
 		return -1;
 	} else {
