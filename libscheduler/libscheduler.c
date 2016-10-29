@@ -113,13 +113,13 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 
 	//Gather info job queue info
 	job_t* peek_job = priqueue_at(job_queue, 0);
-	if(peek_job != NULL) {
+	if (peek_job != NULL) {
 		peek_job->remaining_time -= time;
 	}
 
 	//******delete********
 	printf(
-	ANSI_COLOR_YELLOW"******** scheduler_new_job: Elements in jobs queue : ");
+			ANSI_COLOR_YELLOW"******** scheduler_new_job: Elements in jobs queue : ");
 	for (int i = 0; i < priqueue_size(job_queue); i++)
 		printf("%d ", *((int *) priqueue_at(job_queue, i)));
 	printf("*********"ANSI_COLOR_RESET"\n");
@@ -146,13 +146,21 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 		} else {
 			return -1;
 		}
-	} else if (current_scheduling_scheme == PPRI) {
+//	} else if (current_scheduling_scheme == PPRI) {
+//		if (peek_job == NULL) {
+//			priqueue_offer(job_queue, new_job);
+//			new_job->start_time = time;
+//			return 0;
+//		} else {
+//			peek_job->remaining_time
+//		}
+	} else if (current_scheduling_scheme == RR) {
+		priqueue_offer(job_queue, new_job);
 		if (peek_job == NULL) {
-			priqueue_offer(job_queue, new_job);
 			new_job->start_time = time;
 			return 0;
-		} else  {
-			peek_job->remaining_time
+		} else {
+			return -1;
 		}
 	} else {
 		return -1;
