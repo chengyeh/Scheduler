@@ -559,7 +559,7 @@ int compare_PPRI(const void* a, const void* b) {
 
 	int compare = ((job_t*) a)->priority - ((job_t*) b)->priority;
 	if (compare == 0) {
-		int compare = ((job_t*) a)->arrival_time - ((job_t*) b)->arrival_time;
+		compare = ((job_t*) a)->arrival_time - ((job_t*) b)->arrival_time;
 	}
 	return (compare);
 }
