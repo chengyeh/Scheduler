@@ -117,9 +117,6 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 	//Gather info job queue info
 	job_t* peek_job = priqueue_at(job_queue, 0);
 	if (peek_job != NULL) {
-		if(peek_job->init_start_time == time) {
-			peek_job->init_start_time = -1;
-		}
 		peek_job->pause_time = time;
 		peek_job->remaining_time -= (peek_job->pause_time)
 				- (peek_job->start_time);
@@ -155,70 +152,24 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority) 
 			return 0;
 		} else {
 			new_job->init_start_time = -1;
-			if(peek_job->init_start_time == -1) {
-				peek_job->init_start_time = time;
-			}
 			new_job->pause_time = time;
 			return -1;
 		}
 	} else if (current_scheduling_scheme == PPRI) {
-
 		priqueue_offer(job_queue, new_job);
 		if (peek_job == NULL) {
 			new_job->init_start_time = time;
 			new_job->start_time = time;
-			new_job->pause_time = -1;
-			new_job->idle_time = 0;
+			return 0;
+		} else if (peek_job->priority > new_job->priority) {
+			new_job->init_start_time = time;
+			new_job->start_time = time;
 			return 0;
 		} else {
-			if (peek_job->priority > new_job->priority) {
-				//New job gets front of the queue
-				new_job->init_start_time = time;
-				new_job->start_time = time;
-				new_job->pause_time = -1;
-				new_job->idle_time = 0;
-
-				//Peek jobs gets behind the new job
-				peek_job->pause_time = time;
-				peek_job->idle_time += 0;
-
-				printf(
-						ANSI_COLOR_YELLOW"******** current_scheduling_scheme == PPRI scheduler_new_job ***********\n");
-				printf("new_job->job_number : %d\n",
-						new_job->job_number);
-				printf("new_job->arrival_time : %d\n",
-						new_job->arrival_time);
-				printf("new_job->init_start_time : %d\n",
-						new_job->init_start_time);
-				printf("*********"ANSI_COLOR_RESET"\n");
-
-				return 0;
-			} else {
-				new_job->init_start_time = -1;
-				if(peek_job->init_start_time == -1) {
-					peek_job->init_start_time = time;
-				}
-				new_job->start_time = -1;
-				new_job->pause_time = time;
-				new_job->idle_time = 0;
-				return -1;
-			}
+			new_job->init_start_time = -1;
+			new_job->pause_time = time;
+			return -1;
 		}
-
-//		priqueue_offer(job_queue, new_job);
-//		if (peek_job == NULL) {
-//			new_job->init_start_time = time;
-//			new_job->start_time = time;
-//			return 0;
-//		} else if (peek_job->priority > new_job->priority) {
-//			new_job->init_start_time = time;
-//			new_job->start_time = time;
-//			return 0;
-//		} else {
-//			new_job->init_start_time = -1;
-//			new_job->pause_time = time;
-//			return -1;
-//		}
 	} else if (current_scheduling_scheme == RR) {
 		priqueue_offer(job_queue, new_job);
 		if (peek_job == NULL) {
@@ -381,21 +332,6 @@ int scheduler_job_finished(int core_id, int job_number, int time) {
 		total_response_time += finished_job->init_start_time
 				- finished_job->arrival_time;
 		total_waiting_time += finished_job->idle_time;
-
-		printf(
-				ANSI_COLOR_GREEN"******** current_scheduling_scheme == PPRI ***********\n");
-		printf("total_waiting_time : %d\n", total_waiting_time);
-		printf("total_turnaround_time : %d\n", total_turnaround_time);
-		printf("total_response_time : %d\n", total_response_time);
-		printf("total_number_of_jobs : %d\n", total_number_of_jobs);
-		printf("finished_job->job_number : %d\n", finished_job->job_number);
-		printf("finished_job->arrival_time : %d\n", finished_job->arrival_time);
-		printf("finished_job->init_start_time : %d\n",
-				finished_job->init_start_time);
-		printf("finished_job  response_time : %d\n",
-				(finished_job->init_start_time - finished_job->arrival_time));
-		printf("*********"ANSI_COLOR_RESET"\n");
-
 		free(finished_job);
 
 		job_t* peek_job = priqueue_at(job_queue, 0);
@@ -404,60 +340,12 @@ int scheduler_job_finished(int core_id, int job_number, int time) {
 		} else {
 			if (peek_job->init_start_time == -1) {
 				peek_job->init_start_time = time;
-				peek_job->start_time = time;
-				peek_job->pause_time = -1;
-				peek_job->idle_time = time - peek_job->arrival_time;
-
-				printf(
-						ANSI_COLOR_CYAN"******** current_scheduling_scheme == PPRI init_start_time == -1***********\n");
-				printf("peek_job->job_number : %d\n", peek_job->job_number);
-				printf("peek_job->arrival_time : %d\n", peek_job->arrival_time);
-				printf("peek_job->init_start_time : %d ",
-						peek_job->init_start_time);
-				printf("*********"ANSI_COLOR_RESET"\n");
-
-			} else {
-
-				printf(
-						ANSI_COLOR_RED"******** current_scheduling_scheme == PPRI ***********\n");
-				printf("peek_job->job_number : %d\n", peek_job->job_number);
-				printf("peek_job->arrival_time : %d\n", peek_job->arrival_time);
-				printf("peek_job->init_start_time : %d ",
-						peek_job->init_start_time);
-				printf("*********"ANSI_COLOR_RESET"\n");
-
-				if (peek_job->pause_time == -1) {
-					peek_job->idle_time += 0;
-				} else {
-					peek_job->idle_time += time - peek_job->pause_time;
-				}
-				peek_job->start_time = time;
 			}
+			peek_job->start_time = time;
+			peek_job->idle_time += (peek_job->start_time)
+					- (peek_job->pause_time);
 			return peek_job->job_number;
 		}
-
-//		//Get info about the job finished
-//		job_t* finished_job = priqueue_poll(job_queue);
-//
-//		//Calculate metrics
-//		total_turnaround_time += time - finished_job->arrival_time;
-//		total_response_time += finished_job->init_start_time
-//				- finished_job->arrival_time;
-//		total_waiting_time += finished_job->idle_time;
-//		//free(finished_job);
-//
-//		job_t* peek_job = priqueue_at(job_queue, 0);
-//		if (peek_job == NULL) {
-//			return -1;
-//		} else {
-//			if (peek_job->init_start_time == -1) {
-//				peek_job->init_start_time = time;
-//			}
-//			peek_job->start_time = time;
-//			peek_job->idle_time += (peek_job->start_time)
-//					- (peek_job->pause_time);
-//			return peek_job->job_number;
-//		}
 	} else if (current_scheduling_scheme == RR) {
 		//Get info about the job finished
 		job_t* finished_job = priqueue_poll(job_queue);
@@ -664,11 +552,7 @@ int compare_PSJF(const void* a, const void* b) {
 }
 
 int compare_PRI(const void* a, const void* b) {
-	int compare = ((job_t*) a)->priority - ((job_t*) b)->priority;
-	if (compare == 0) {
-		compare = ((job_t*) a)->arrival_time - ((job_t*) b)->arrival_time;
-	}
-	return (compare);
+	return (((job_t*) a)->priority - ((job_t*) b)->priority);
 }
 
 int compare_PPRI(const void* a, const void* b) {
